@@ -1,0 +1,17 @@
+.DS_Store
+
+#Compiled File Windows
+*.exe
+
+#Compiled File MacOS
+*.out
+
+#Addition
+.vscode
+.idea
+
+# binary
+pmg
+
+# build
+build
