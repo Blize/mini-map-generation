@@ -39,7 +39,7 @@ void generateHills() {
 }
 
 void placeWater(int x, int y) {
-    if (rand() % 20 == 0) {
+    if (rand() % 20 == 0) { // Chance of water spawning
         map[x][y][2].type = WATER;
 
         int seaSize = rand() % 10 + 5;
@@ -127,6 +127,9 @@ int main(void) {
     generateMap();
 
     while (!WindowShouldClose()) {
+
+        // Uncomment line below for camera control
+        // UpdateCamera(&camera, 1);
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && GetMouseX() > SCREEN_WIDTH - 50 && GetMouseY() < 50) {
             generateMap();
