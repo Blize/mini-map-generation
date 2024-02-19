@@ -31,6 +31,14 @@ To change the size of map just change the makros at the beginning of the c file.
 
 To change the chances of blocks like water or width of mountains go into the code (its commented)
 
+### Camera control
+
+To enable camera control uncommented the function in the main game loop
+
+```c
+UpdateCamera(&camera, 1);
+```
+
 ## Info
 
 This Project was coded in 1h at home and is not good at all. Its as mentioned at top just an little example for an presentation and I am pretty sure I won't change the code later on
