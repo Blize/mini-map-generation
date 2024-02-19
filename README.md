@@ -10,10 +10,21 @@ Those are:
 - Water
 - (Air)
 
-## Install
+## Install & Run
 
 The Project is coded in c and for rendering we use the library raylib (version 4.5).
-To **run** the project install an c compiler and install [raylib](https://www.raylib.com)
+To **run** the project install an c compiler and install [raylib](https://www.raylib.com).
+After that run following command
+
+```bash
+make
+```
+
+To remove the generate files from make run
+
+```bash
+make clean
+```
 
 ## Code adjustments for diffrent results
 
