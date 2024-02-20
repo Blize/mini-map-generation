@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include <stdlib.h>
+#include <math.h>
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -9,7 +10,7 @@
 #define MAP_Y 10
 #define MAP_Z 7
 
-typedef enum { GRASS, STONE, WATER, AIR } BlockType;
+typedef enum { GRASS, STONE, DIRT, WATER, AIR } BlockType;
 
 typedef struct {
     BlockType type;
@@ -33,8 +34,10 @@ void generateHills() {
 
                 for (int z = startZ; z < MAP_Z; z++) {
                     for (int w = -width / 2; w <= width / 2; w++) {
-                        if (x + w >= 0 && x + w < MAP_X && y + w >= 0 && y + w < MAP_Y) {
-                            map[x + w][y + w][z].type = STONE;
+                        float decreasingTop = width - z;
+                        if (x + w + (int)round(decreasingTop) >= 0 && x + w + (int)round(decreasingTop) < MAP_X &&
+                            y + w + (int)round(decreasingTop) >= 0 && y + w + (int)round(decreasingTop) < MAP_Y) {
+                            map[x + w + (int)round(decreasingTop)][y + w + (int)round(decreasingTop)][z].type = STONE;
                         }
                     }
                 }
@@ -69,7 +72,7 @@ void generateMap() {
         for (int y = 0; y < MAP_Y; y++) {
             for (int z = 0; z < MAP_Z; z++) {
                 if (z < 2) {
-                    map[x][y][z].type = STONE; // Base layer set to have an minecraft junk look
+                    map[x][y][z].type = DIRT; // Base layer set to have an minecraft junk look
                 } else if (z == 2) {
                     map[x][y][z].type = GRASS;
                     placeWater(x, y);
@@ -96,6 +99,9 @@ void drawMap() {
                         break;
                     case STONE:
                         color = GRAY;
+                        break;
+                    case DIRT:
+                        color = BROWN;
                         break;
                     case WATER:
                         color = BLUE;
@@ -130,7 +136,7 @@ int main(void) {
     while (!WindowShouldClose()) {
 
         // Uncomment line below for camera control
-        // UpdateCamera(&camera, 1);
+        // UpdateCamera(&camera, 0);
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && GetMouseX() > SCREEN_WIDTH - 50 && GetMouseY() < 50) {
             generateMap();
