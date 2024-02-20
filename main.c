@@ -21,9 +21,14 @@ Block map[MAP_X][MAP_Y][MAP_Z];
 void generateHills() {
     for (int x = 1; x < MAP_X - 1; x++) {
         for (int y = 1; y < MAP_Y - 1; y++) {
+            // Skip generating hills if there is water at this location
+            if (map[x][y][2].type == WATER) {
+                continue;
+            }
+
             if (rand() % 20 == 0) {
-                const int height = rand() % (MAP_Z - 2) + 2; // Generate height between 2 and MAP_Z
-                const int width = rand() % 10 + 2; // Generate width of mountain
+                const int height = rand() % (MAP_Z - 2) + 2;
+                const int width = rand() % 10 + 2;
                 int startZ = MAP_Z - height;
 
                 for (int z = startZ; z < MAP_Z; z++) {
