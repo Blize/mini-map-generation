@@ -39,28 +39,25 @@ void generateHills() {
 }
 
 void placeWater(int x, int y) {
-    if (rand() % 20 == 0) { // Chance of water spawning
+    if (rand() % 40 == 0) {
         map[x][y][2].type = WATER;
 
-        int seaSize = rand() % 10 + 5;
-
-        int dirX = rand() % 3 - 1;
-        int dirY = rand() % 3 - 1;
+        int seaSize = rand() % 4 + 1;
 
         for (int i = 1; i <= seaSize; i++) {
-            // Update the adjacent water block
-            if (x + i * dirX >= 0 && x + i * dirX < MAP_X && y + i * dirY >= 0 && y + i * dirY < MAP_Y) {
-                map[x + i * dirX][y + i * dirY][2].type = WATER;
-            } else {
-                break;
+            for (int dirX = -1; dirX <= 1; dirX++) {
+                for (int dirY = -1; dirY <= 1; dirY++) {
+                    int newX = x + i * dirX;
+                    int newY = y + i * dirY;
+
+                    if (newX >= 0 && newX < MAP_X && newY >= 0 && newY < MAP_Y) {
+                        map[newX][newY][2].type = WATER;
+                    }
+                }
             }
         }
     }
 }
-
-
-
-
 
 void generateMap() {
     for (int x = 0; x < MAP_X; x++) {
@@ -80,7 +77,6 @@ void generateMap() {
 
     generateHills();
 }
-
 
 void drawMap() {
     for (int i = 0; i < MAP_X; i++) {
