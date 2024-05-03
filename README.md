@@ -1,13 +1,13 @@
 # mini-map-generation
 
 This is an very very basic example of an procedural map generation algorithm, which was quickly coded for an procedural map generation presentation the night before.
-The map only consists of three blocks (5 if you count air).
+The map only consists of four blocks (5 if you count air).
 
 Those are:
 
 - Stone
 - Grass
-- DIRT
+- Dirt
 - Water
 - (Air)
 
