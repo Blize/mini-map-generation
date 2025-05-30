@@ -1,14 +1,13 @@
 #include <raylib.h>
 #include <stdlib.h>
-#include <math.h>
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 #define BLOCK_SIZE 1.0f
 
-#define MAP_X 12
-#define MAP_Y 10
-#define MAP_Z 7
+#define MAP_X 50
+#define MAP_Y 50
+#define MAP_Z 25
 
 typedef enum { GRASS, STONE, DIRT, WATER, AIR } BlockType;
 
@@ -19,25 +18,41 @@ typedef struct {
 Block map[MAP_X][MAP_Y][MAP_Z];
 
 
+Color ColorBrightness(Color color, float factor) {
+    return (Color){
+        .r = (unsigned char)(color.r * factor),
+        .g = (unsigned char)(color.g * factor),
+        .b = (unsigned char)(color.b * factor),
+        .a = color.a
+    };
+}
+
 void generateHills() {
-    for (int x = 1; x < MAP_X - 1; x++) {
-        for (int y = 1; y < MAP_Y - 1; y++) {
-            // Skip generating hills if there is water at this location
-            if (map[x][y][2].type == WATER) {
-                continue;
-            }
+    int density = 40;
+    int numHills = (MAP_X * MAP_Y) / density;  // Adjust density factor to taste
 
-            if (rand() % 20 == 0) {
-                const int height = rand() % (MAP_Z - 2) + 2;
-                const int width = rand() % 10 + 2;
-                int startZ = MAP_Z - height;
+    for (int i = 0; i < numHills; i++) {
+        int cx = rand() % (MAP_X - 4) + 2; // Avoid edge
+        int cy = rand() % (MAP_Y - 4) + 2;
+        int height = rand() % (MAP_Z - 3) + 3; // Min height 3
+        int baseRadius = rand() % 3 + 2;       // Base width
 
-                for (int z = startZ; z < MAP_Z; z++) {
-                    for (int w = -width / 2; w <= width / 2; w++) {
-                        float decreasingTop = width - z;
-                        if (x + w + (int)round(decreasingTop) >= 0 && x + w + (int)round(decreasingTop) < MAP_X &&
-                            y + w + (int)round(decreasingTop) >= 0 && y + w + (int)round(decreasingTop) < MAP_Y) {
-                            map[x + w + (int)round(decreasingTop)][y + w + (int)round(decreasingTop)][z].type = STONE;
+        for (int h = 0; h < height; h++) {
+            int radius = baseRadius - h; // Taper the hill
+            if (radius < 0) break;
+
+            for (int dx = -radius; dx <= radius; dx++) {
+                for (int dy = -radius; dy <= radius; dy++) {
+                    int x = cx + dx;
+                    int y = cy + dy;
+                    int z = MAP_Z - height + h;
+
+                    
+                    if (x >= 0 && x < MAP_X && y >= 0 && y < MAP_Y && z >= 0 && z < MAP_Z) {
+                        if (map[x][y][2].type != WATER) {
+                            for (int fillZ = 2; fillZ <= z; fillZ++) {
+                                map[x][y][fillZ].type = STONE;
+                            }
                         }
                     }
                 }
@@ -46,11 +61,13 @@ void generateHills() {
     }
 }
 
+
+
 void placeWater(int x, int y) {
     if (rand() % 40 == 0) {
         map[x][y][2].type = WATER;
 
-        int seaSize = rand() % 4 + 1;
+        int seaSize = rand() % 4 + ((MAP_X + MAP_Y) / 8);
 
         for (int i = 1; i <= seaSize; i++) {
             for (int dirX = -1; dirX <= 1; dirX++) {
@@ -113,6 +130,9 @@ void drawMap() {
                         break;
                 }
 
+                float shadeFactor = 1.0f - (float)z / MAP_Z;
+                color = ColorBrightness(color, shadeFactor);
+
                 DrawCube(position, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, color);
             }
         }
@@ -136,10 +156,12 @@ int main(void) {
     while (!WindowShouldClose()) {
 
         // Uncomment line below for camera control
-        // UpdateCamera(&camera, 0);
+        UpdateCamera(&camera, 1);
 
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && GetMouseX() > SCREEN_WIDTH - 50 && GetMouseY() < 50) {
-            generateMap();
+        if (IsKeyPressed(KEY_R) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
+                                       GetMouseX() > SCREEN_WIDTH - 50 &&
+                                       GetMouseY() < 50)) {
+          generateMap();
         }
 
         // Draw

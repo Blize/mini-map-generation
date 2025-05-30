@@ -6,9 +6,9 @@ CFLAGS = -std=c99 -Wall -Wno-missing-braces -Wunused-result -D_DEFAULT_SOURCE
 PROJECT_NAME = pmg
 PROJECT_SOURCE = main.c
 
-RAYLIB_PATH = ../../raylib
-INCLUDE_PATHS = -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external -I$(RAYLIB_PATH)/src/extras
-LDFLAGS = -L$(RAYLIB_PATH)/src -L$(RAYLIB_PATH)/src/platform
+RAYLIB_PATH = $(shell brew --prefix raylib)
+INCLUDE_PATHS = -I$(RAYLIB_PATH)/include
+LDFLAGS = -L$(RAYLIB_PATH)/lib
 
 # Define the libraries required on linking
 LDLIBS = -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreAudio -framework CoreVideo
