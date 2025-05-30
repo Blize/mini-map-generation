@@ -1,12 +1,13 @@
 # mini-map-generation
 
 This is an very very basic example of an procedural map generation algorithm, which was quickly coded for an procedural map generation presentation the night before.
-The map only consists of three blocks (4 if you count air).
+The map only consists of four blocks (5 if you count air).
 
 Those are:
 
 - Stone
 - Grass
+- Dirt
 - Water
 - (Air)
 
@@ -47,7 +48,7 @@ To change the chances of blocks like water or width of mountains go into the cod
 To enable camera control uncommented the function in the main game loop
 
 ```c
-UpdateCamera(&camera, 1);
+UpdateCamera(&camera, 0);
 ```
 
 ## Info
